@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/list-screen.dart';
+import 'screens/detail-screen.dart';
 
 class App extends StatelessWidget {
   @override
@@ -8,7 +9,10 @@ class App extends StatelessWidget {
       title: 'Wasteagram',
       theme: ThemeData.dark(),
       initialRoute: '/',
-      routes: {'/': (context) => ListScreen()},
+      routes: {
+        '/': (context) => ListScreen(),
+        '/details': (context) => DetailScreen()
+      },
     );
   }
 }

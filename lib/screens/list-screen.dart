@@ -30,6 +30,9 @@ class PostList extends StatelessWidget {
           .map((post) => ListTile(
                 title: Text(post["date"].toString()),
                 trailing: Text(post["count"].toString()),
+                onTap: () {
+                  Navigator.pushNamed(context, '/details', arguments: {});
+                },
               ))
           .toList(),
     );

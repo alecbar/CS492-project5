@@ -10,7 +10,9 @@ class ListScreen extends StatelessWidget {
           title: Text("Wasteagram - #"),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/new', arguments: {});
+          },
           child: const Icon(Icons.camera_alt),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

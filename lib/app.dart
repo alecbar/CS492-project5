@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/list-screen.dart';
 import 'screens/detail-screen.dart';
+import 'screens/new-screen.dart';
 
 class App extends StatelessWidget {
   @override
@@ -11,7 +12,8 @@ class App extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => ListScreen(),
-        '/details': (context) => DetailScreen()
+        '/details': (context) => DetailScreen(),
+        '/new': (context) => NewScreen()
       },
     );
   }

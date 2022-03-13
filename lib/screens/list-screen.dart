@@ -1,7 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-class ListScreen extends StatelessWidget {
+class ListScreen extends StatefulWidget {
+  @override
+  State<ListScreen> createState() => _ListScreenState();
+}
+
+class _ListScreenState extends State<ListScreen> {
   var posts = [];
+
+  PickedFile? image;
+  final picker = ImagePicker();
+  File? imageFile;
+
+  void getImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      image = PickedFile(pickedFile.path);
+
+      print(image!.path);
+      //imageFile = File(image!.path);
+      Navigator.pushNamed(context, '/new', arguments: image!.path);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +34,7 @@ class ListScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/new', arguments: {});
+            getImage();
           },
           child: const Icon(Icons.camera_alt),
         ),

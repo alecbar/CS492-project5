@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class NewScreen extends StatefulWidget {
   @override
@@ -7,17 +8,15 @@ class NewScreen extends StatefulWidget {
 }
 
 class _NewScreenState extends State<NewScreen> {
-  PickedFile? image;
-  final picker = ImagePicker();
-
-  void getImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    image = PickedFile(pickedFile!.path);
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
+    String imagePath =
+        ModalRoute.of(context)?.settings.arguments.toString() as String;
+
+    print(imagePath);
+
+    File imageFile = File(imagePath);
+
     return Scaffold(
       appBar: AppBar(title: Text('New Post')),
       body: Column(
@@ -28,7 +27,7 @@ class _NewScreenState extends State<NewScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(22.0),
-            child: Placeholder(),
+            child: Image.file(imageFile),
           ),
           Padding(
             padding: const EdgeInsets.all(22.0),
@@ -45,9 +44,7 @@ class _NewScreenState extends State<NewScreen> {
           Padding(
             padding: const EdgeInsets.all(22.0),
             child: TextButton(
-                onPressed: () {
-                  getImage();
-                },
+                onPressed: () {},
                 child: Text(
                   'Upload',
                   style: TextStyle(color: Colors.white),

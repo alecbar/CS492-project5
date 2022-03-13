@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class NewScreen extends StatelessWidget {
+class NewScreen extends StatefulWidget {
+  @override
+  State<NewScreen> createState() => _NewScreenState();
+}
+
+class _NewScreenState extends State<NewScreen> {
+  PickedFile? image;
+  final picker = ImagePicker();
+
+  void getImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    image = PickedFile(pickedFile!.path);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +45,9 @@ class NewScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(22.0),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  getImage();
+                },
                 child: Text(
                   'Upload',
                   style: TextStyle(color: Colors.white),

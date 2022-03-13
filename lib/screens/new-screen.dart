@@ -27,7 +27,10 @@ class _NewScreenState extends State<NewScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(22.0),
-            child: Image.file(imageFile),
+            child: Image.file(
+              imageFile,
+              height: 320,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(22.0),

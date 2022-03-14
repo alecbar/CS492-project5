@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewScreen extends StatefulWidget {
   @override
@@ -8,12 +9,28 @@ class NewScreen extends StatefulWidget {
 }
 
 class _NewScreenState extends State<NewScreen> {
+  void storeImage(String imagePath) async {
+    File imageFile = File(imagePath);
+
+    // Do we need to generate a random ID
+
+    // Storage ref with name of file
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('example.jpg');
+
+    UploadTask uploadTask = storageReference.putFile(imageFile);
+    await uploadTask;
+    final url = await storageReference.getDownloadURL();
+
+    print(url);
+
+    // Get URL and then store JSON document with URL
+  }
+
   @override
   Widget build(BuildContext context) {
     String imagePath =
         ModalRoute.of(context)?.settings.arguments.toString() as String;
-
-    print(imagePath);
 
     File imageFile = File(imagePath);
 
@@ -47,7 +64,9 @@ class _NewScreenState extends State<NewScreen> {
           Padding(
             padding: const EdgeInsets.all(22.0),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  storeImage(imagePath);
+                },
                 child: Text(
                   'Upload',
                   style: TextStyle(color: Colors.white),

@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+
+class PostData {
+  late String url;
+  late String date;
+  late int items;
+}
 
 class NewScreen extends StatefulWidget {
   @override
@@ -9,22 +16,30 @@ class NewScreen extends StatefulWidget {
 }
 
 class _NewScreenState extends State<NewScreen> {
-  void storeImage(String imagePath) async {
-    File imageFile = File(imagePath);
+  final post = PostData();
 
-    // Do we need to generate a random ID
+  late String imagePath;
+
+  Future storeImage(String imagePath) async {
+    // Load image file
+    File imageFile = File(imagePath);
 
     // Storage ref with name of file
     Reference storageReference =
-        FirebaseStorage.instance.ref().child('example.jpg');
+        FirebaseStorage.instance.ref().child("${DateTime.now()}.jpg");
 
+    // Upload image
     UploadTask uploadTask = storageReference.putFile(imageFile);
     await uploadTask;
     final url = await storageReference.getDownloadURL();
 
-    print(url);
+    return url;
+  }
 
-    // Get URL and then store JSON document with URL
+  void savePost(PostData post) async {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .add({'items': post.items, 'url': post.url, 'date': post.date});
   }
 
   @override
@@ -33,6 +48,7 @@ class _NewScreenState extends State<NewScreen> {
         ModalRoute.of(context)?.settings.arguments.toString() as String;
 
     File imageFile = File(imagePath);
+    int numItems = 0;
 
     return Scaffold(
       appBar: AppBar(title: Text('New Post')),
@@ -52,11 +68,20 @@ class _NewScreenState extends State<NewScreen> {
           Padding(
             padding: const EdgeInsets.all(22.0),
             child: TextFormField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: 'Number of items',
-              ),
-            ),
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Number of items',
+                ),
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  post.items = int.parse(value);
+                  setState(() {
+                    numItems = int.parse(value);
+                  });
+                },
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ]),
           ),
           SizedBox(
             height: 22,
@@ -64,8 +89,17 @@ class _NewScreenState extends State<NewScreen> {
           Padding(
             padding: const EdgeInsets.all(22.0),
             child: TextButton(
-                onPressed: () {
-                  storeImage(imagePath);
+                onPressed: () async {
+                  final url = await storeImage(imagePath);
+
+                  // Create post object
+                  post.url = url;
+                  post.date = DateTime.now().toString();
+
+                  // Pass post to save post
+                  savePost(post);
+
+                  Navigator.pushNamed(context, "/");
                 },
                 child: Text(
                   'Upload',

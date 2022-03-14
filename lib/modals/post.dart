@@ -8,7 +8,7 @@ class Post {
   late double lattitude;
   late double longitude;
 
-  Post(this.url, this.items, this.date);
+  Post(this.url, this.items, this.date, this.lattitude, this.longitude);
 
   Post.fromMap(Map<String, dynamic> data) {
     url = data["url"];

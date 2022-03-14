@@ -54,7 +54,7 @@ class _PostListState extends State<PostList> {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
-            .orderBy('sinceEpoch', descending: true)
+            .orderBy('date', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData &&

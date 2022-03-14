@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 class PostData {
   late String url;
-  late String date;
+  late Timestamp date;
   late int items;
 }
 
@@ -104,7 +104,7 @@ class _NewScreenState extends State<NewScreen> {
 
                         // Create post object
                         post.url = url;
-                        post.date = DateTime.now().toString();
+                        post.date = Timestamp.now();
 
                         // Pass post to save post
                         savePost(post);

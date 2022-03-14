@@ -17,7 +17,7 @@ class NewScreen extends StatefulWidget {
 
 class _NewScreenState extends State<NewScreen> {
   final post = PostData();
-
+  bool loading = false;
   late String imagePath;
 
   Future storeImage(String imagePath) async {
@@ -52,63 +52,74 @@ class _NewScreenState extends State<NewScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text('New Post')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            height: 22,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(22.0),
-            child: Image.file(
-              imageFile,
-              height: 320,
+      body: loading
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Center(child: CircularProgressIndicator())],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: 22,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(22.0),
+                  child: Image.file(
+                    imageFile,
+                    height: 320,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(22.0),
+                  child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'Number of items',
+                      ),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        post.items = int.parse(value);
+                        setState(() {
+                          numItems = int.parse(value);
+                        });
+                      },
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ]),
+                ),
+                SizedBox(
+                  height: 22,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(22.0),
+                  child: TextButton(
+                      onPressed: () async {
+                        // Update loading state
+                        setState(() {
+                          loading = true;
+                        });
+
+                        final url = await storeImage(imagePath);
+
+                        // Create post object
+                        post.url = url;
+                        post.date = DateTime.now().toString();
+
+                        // Pass post to save post
+                        savePost(post);
+
+                        Navigator.pushNamed(context, "/");
+                      },
+                      child: Text(
+                        'Upload',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style:
+                          TextButton.styleFrom(backgroundColor: Colors.blue)),
+                ),
+              ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(22.0),
-            child: TextFormField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Number of items',
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  post.items = int.parse(value);
-                  setState(() {
-                    numItems = int.parse(value);
-                  });
-                },
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ]),
-          ),
-          SizedBox(
-            height: 22,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(22.0),
-            child: TextButton(
-                onPressed: () async {
-                  final url = await storeImage(imagePath);
-
-                  // Create post object
-                  post.url = url;
-                  post.date = DateTime.now().toString();
-
-                  // Pass post to save post
-                  savePost(post);
-
-                  Navigator.pushNamed(context, "/");
-                },
-                child: Text(
-                  'Upload',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: TextButton.styleFrom(backgroundColor: Colors.blue)),
-          ),
-        ],
-      ),
     );
   }
 }

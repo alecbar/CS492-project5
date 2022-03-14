@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../modals/post.dart';
 
 class ListScreen extends StatefulWidget {
   @override
@@ -10,8 +10,6 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  var posts = [];
-
   PickedFile? image;
   final picker = ImagePicker();
   File? imageFile;
@@ -32,7 +30,7 @@ class _ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Wasteagram - #"),
+          title: Text("Wasteagram"),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -62,10 +60,19 @@ class _PostListState extends State<PostList> {
             return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  var post = snapshot.data!.docs[index];
+                  var postDoc = snapshot.data!.docs[index];
+
+                  var postData = {
+                    "date": postDoc["date"],
+                    "items": postDoc["items"],
+                    "url": postDoc["url"]
+                  };
+
+                  Post post = Post.fromMap(postData);
+
                   return ListTile(
-                    title: Text(post["date"].toString()),
-                    trailing: Text(post["items"].toString()),
+                    title: Text(post.longDate),
+                    trailing: Text(post.itemsText),
                   );
                 });
           } else {

@@ -32,11 +32,17 @@ class _ListScreenState extends State<ListScreen> {
         appBar: AppBar(
           title: Text("Wasteagram"),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            getImage();
-          },
-          child: const Icon(Icons.camera_alt),
+        floatingActionButton: Semantics(
+          button: true,
+          enabled: true,
+          label: "Camera",
+          onTapHint: "Choose an image",
+          child: FloatingActionButton(
+            onPressed: () {
+              getImage();
+            },
+            child: const Icon(Icons.camera_alt),
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: PostList());
@@ -75,12 +81,17 @@ class _PostListState extends State<PostList> {
 
                   Post post = Post.fromMap(postData);
 
-                  return ListTile(
-                    title: Text(post.longDate),
-                    trailing: Text(post.itemsText),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/details', arguments: post);
-                    },
+                  return Semantics(
+                    label: "Post from ${post.longDate}",
+                    onTapHint: "View post details",
+                    child: ListTile(
+                      title: Text(post.longDate),
+                      trailing: Text(post.itemsText),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/details',
+                            arguments: post);
+                      },
+                    ),
                   );
                 });
           } else {

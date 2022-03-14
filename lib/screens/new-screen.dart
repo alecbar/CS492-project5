@@ -139,30 +139,36 @@ class _NewScreenState extends State<NewScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(22.0),
-                  child: TextButton(
-                      onPressed: () async {
-                        // Update loading state
-                        setState(() {
-                          loading = true;
-                        });
+                  child: Semantics(
+                    label: "Save",
+                    onTapHint: "Save new post",
+                    button: true,
+                    enabled: true,
+                    child: TextButton(
+                        onPressed: () async {
+                          // Update loading state
+                          setState(() {
+                            loading = true;
+                          });
 
-                        final url = await storeImage(imagePath);
+                          final url = await storeImage(imagePath);
 
-                        // Create post object
-                        post.url = url;
-                        post.date = Timestamp.now();
+                          // Create post object
+                          post.url = url;
+                          post.date = Timestamp.now();
 
-                        // Pass post to save post
-                        savePost(post);
+                          // Pass post to save post
+                          savePost(post);
 
-                        Navigator.pushNamed(context, "/");
-                      },
-                      child: Text(
-                        'Upload',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style:
-                          TextButton.styleFrom(backgroundColor: Colors.blue)),
+                          Navigator.pushNamed(context, "/");
+                        },
+                        child: Text(
+                          'Upload',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style:
+                            TextButton.styleFrom(backgroundColor: Colors.blue)),
+                  ),
                 ),
               ],
             ),

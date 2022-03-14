@@ -73,6 +73,9 @@ class _PostListState extends State<PostList> {
                   return ListTile(
                     title: Text(post.longDate),
                     trailing: Text(post.itemsText),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/details', arguments: post);
+                    },
                   );
                 });
           } else {

@@ -39,7 +39,16 @@ class _ListScreenState extends State<ListScreen> {
           child: const Icon(Icons.camera_alt),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        body: PostList());
+        body: posts.length > 0
+            ? PostList()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: CircularProgressIndicator(),
+                  )
+                ],
+              ));
   }
 }
 

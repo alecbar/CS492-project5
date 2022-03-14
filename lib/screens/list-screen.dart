@@ -65,7 +65,9 @@ class _PostListState extends State<PostList> {
                   var postData = {
                     "date": postDoc["date"],
                     "items": postDoc["items"],
-                    "url": postDoc["url"]
+                    "url": postDoc["url"],
+                    "lattitude": postDoc["lattitude"],
+                    "longitude": postDoc["longitude"],
                   };
 
                   Post post = Post.fromMap(postData);

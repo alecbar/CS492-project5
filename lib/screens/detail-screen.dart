@@ -33,6 +33,14 @@ class DetailScreen extends StatelessWidget {
               "${post.itemsText} items",
               style: TextStyle(fontSize: 22.0),
             )),
+            SizedBox(
+              height: 32.0,
+            ),
+            Center(
+                child: Text(
+              "Location (${post.lattitude}, ${post.longitude})",
+              style: TextStyle(fontSize: 12.0),
+            )),
           ],
         ),
       ),

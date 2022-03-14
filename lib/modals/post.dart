@@ -5,6 +5,8 @@ class Post {
   late String url;
   late int items;
   late Timestamp date;
+  late double lattitude;
+  late double longitude;
 
   Post(this.url, this.items, this.date);
 
@@ -12,6 +14,8 @@ class Post {
     url = data["url"];
     items = data["items"];
     date = data["date"];
+    lattitude = data["lattitude"];
+    longitude = data["longitude"];
   }
 
   String get itemsText {
